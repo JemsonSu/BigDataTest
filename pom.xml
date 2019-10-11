@@ -6,7 +6,11 @@
 
     <groupId>com.jemson</groupId>
     <artifactId>BigDataTest</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>spark_2.4.0_cdh6.1.1</module>
+    </modules>
 
     <dependencies>
 
@@ -14,5 +18,25 @@
 
     </dependencies>
 
+    <repositories>
+
+        <repository>
+            <id>alimaven</id>
+            <name>aliyun maven</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        </repository>
+
+        <repository>
+            <id>cloudera</id>
+            <name>cdh</name>
+            <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+        </repository>
+
+        <repository>
+            <id>hortonworks</id>
+            <name>hdp</name>
+            <url>http://repo.hortonworks.com/content/groups/public/</url>
+        </repository>
+    </repositories>
     
 </project>
