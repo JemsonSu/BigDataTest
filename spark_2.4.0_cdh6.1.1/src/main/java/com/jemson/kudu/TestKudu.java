@@ -3,10 +3,7 @@ package com.jemson.kudu;
 import org.apache.kudu.ColumnSchema;
 import org.apache.kudu.Schema;
 import org.apache.kudu.Type;
-import org.apache.kudu.client.CreateTableOptions;
-import org.apache.kudu.client.KuduClient;
-import org.apache.kudu.client.KuduException;
-import org.apache.kudu.client.ListTablesResponse;
+import org.apache.kudu.client.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +20,9 @@ public class TestKudu {
         KuduClient.KuduClientBuilder kuduClientBuilder = new KuduClient.KuduClientBuilder(kuduMasters);
         KuduClient client = kuduClientBuilder.build();
 
-        createTable(client);
 
-        showTables(client);
+
+        insertRows(client);
 
 
         client.shutdown();
@@ -39,6 +36,7 @@ public class TestKudu {
     public static void showTables(KuduClient client) throws Exception {
         ListTablesResponse tablesListResponse = client.getTablesList();
         List<String> tablesList = tablesListResponse.getTablesList();
+        System.out.println("kudu所有表如下:");
         for(String table : tablesList) {
             System.out.println(table);
         }
@@ -70,6 +68,28 @@ public class TestKudu {
         client.createTable(tableName, schema, options);
 
         System.out.println("Created table \"" + tableName + "\" succeed !");
+
+    }
+
+
+    /**
+     * insert data
+     */
+    public static void insertRows(KuduClient client) throws KuduException {
+        String tableName = "kudu_users";
+        KuduTable table = client.openTable(tableName);
+        KuduSession session = client.newSession();
+
+        Insert insert = table.newInsert();
+        PartialRow row = insert.getRow();
+        row.addInt("id",5);
+        row.addString("name","大长腿");
+        OperationResponse apply = session.apply(insert);
+        System.out.println(apply);
+
+        session.close();
+
+        System.out.println("插入成功！");
 
     }
 
