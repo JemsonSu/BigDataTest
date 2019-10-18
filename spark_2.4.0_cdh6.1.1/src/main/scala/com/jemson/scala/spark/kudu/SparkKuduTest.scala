@@ -1,9 +1,12 @@
 package com.jemson.scala.spark.kudu
 
 import org.apache.kudu.spark.kudu.KuduContext
-import org.apache.spark.sql.{DataFrameReader, SQLContext, SparkSession}
-import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.{DataFrameReader, Row, SQLContext, SparkSession}
 
+/**
+ * scala版单纯用spark2.x读取kudu数据
+ */
 object SparkKuduTest {
   def main(args: Array[String]): Unit = {
 
@@ -12,6 +15,9 @@ object SparkKuduTest {
     builder.appName("SparkKuduTest")
     builder.master("local")
     val spark: SparkSession = builder.getOrCreate()
+
+    val sparkContext = spark.sparkContext
+    sparkContext.setLogLevel("ERROR")
 
 
     val read: DataFrameReader = spark.read
@@ -22,7 +28,13 @@ object SparkKuduTest {
     val kuduMaster = "c21"
     val tableName = "kudu_users"
 
-    val kuduContext = new KuduContext(kuduMaster, spark.sparkContext)
+    val kuduContext = new KuduContext(kuduMaster, sparkContext)
+
+
+    val rows: Seq[String] = Seq("id","name")
+    val rdd: RDD[Row] = kuduContext.kuduRDD(sparkContext, tableName, rows)
+
+    rdd.foreach(println)
 
 
 
