@@ -84,6 +84,7 @@ public class TestKudu {
         PartialRow row = insert.getRow();
         row.addInt("id",5);
         row.addString("name","大长腿");
+
         session.apply(insert);
 
 

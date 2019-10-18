@@ -1,4 +1,4 @@
-package com.jemson
+package com.jemson.scala
 
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
